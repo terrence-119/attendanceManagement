@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>TOP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.css" rel="stylesheet" crossorigin="anonymous">
+    <script>
+      // TIMESTAMP型のデータを変換する関数
+      function parseTimestamp(timestamp) {
+        if (!timestamp) {
+          return "";
+        }
+        const date = new Date(timestamp);
+        return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+      }
+
+      // Interval型のデータをパースする
+      function parseInterval(sumTime) {
+        // TODO
+        // そもそもhoursなどがないときはsum_time = {hours: 0, minutes: 0, seconds: 35}のように丁寧に０を送ってくれない
+        var hours = 0;
+        var minutes = 0;
+        var seconds = 0;
+
+        // 各プロパティが存在するか確認し、存在しない場合は0を使用
+        hours = sumTime.hours ? sumTime.hours : 0;
+        minutes = sumTime.minutes ? sumTime.minutes : 0;
+        seconds = sumTime.seconds ? sumTime.seconds : 0;
+
+        // 合計時間を計算する
+        const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+
+        // 時間、分、秒に変換する
+        const formattedHour = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+        const formattedMinutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+        const formattedSeconds = (totalSeconds % 60).toString().padStart(2, '0');
+
+        // 表示用の文字列を生成して返す
+        return `${formattedHour}:${formattedMinutes}:${formattedSeconds}`;
+      }
+
+      function refreshData() {
+        let con = ""
+        data.data.map((ob) => {
+          con += "<tr><th>";
+          con += ob.emp_id + "</th>";
+          con += "<td>" + ob.name + "</td>";
+          con += "<td>" + parseTimestamp(ob.in_time) + "</td>";
+          con += "<td>" + parseTimestamp(ob.out_time) + "</td>";
+          con += "<td>"+ parseInterval(ob.sum_time) + "</td>";
+          con += "<td>" + ob.status + "</td>";
+          con += "<td>" + ob.detail + "</td>";
+          con += "<tr>";
+        });
+        document.querySelector('#datacontainer').innerHTML = con;
+      }
+
+      // TOP PAGE 当日の出退勤レコードを取得
+      function getAttendances() {
+        fetch('/api/attendances')
+          .then(response => {
+            if (!response.ok){
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(res => {
+            data = res;
+            refreshData();
+          })
+          .catch(error => {
+            console.log('There was a problem with the fetch operation: ', error);
+          });
+      }
+    </script>
+  </head>
+
+  <body onload="getAttendances()">
+    <header>
+      <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">Sample Company</a>
+          <div class="collapse navbar-collapse ms-auto" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/employees">従業員一覧</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">従業員ID</th>
+            <th scope="col">名前</th>
+            <th scope="col">出勤時間</th>
+            <th scope="col">退勤時間</th>
+            <th scope="col">勤務時間合計</th>
+            <th scope="col">出退勤状態</th>
+            <th scope="col">備考</th>
+          </tr>
+        </thead>
+        <tbody id="datacontainer">
+        <!-- APIから受け取ったデータがここに表示される-->
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

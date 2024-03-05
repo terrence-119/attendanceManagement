@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>出退勤送信フォーム</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.css" rel="stylesheet" crossorigin="anonymous">
+        <style>
+            #currentTime {
+                font-family: 'Courier New', Courier,monospace;
+            }
+        </style>
+        <script>
+            var id = '';
+            var in_time = ''
+            var out_time = ''
+            var detail = ''
+            var in_button = ''
+            var out_button = ''
+
+            // 現在時刻を表示し、1秒ごとに更新する関数
+            function showCurrentTimeContinuously() {
+                function updateTime() {
+                    const now = new Date();
+                    // 時、分、秒を2桁表示にするために、一桁の場合は先頭に0を追加
+                    const hours = String(now.getHours()).padStart(2, '0');
+                    const minutes = String(now.getMinutes()).padStart(2, '0');
+                    const seconds = String(now.getSeconds()).padStart(2, '0');
+                    const formattedTime = hours + ":" + minutes + ":" + seconds;
+                    document.getElementById('currentTime').innerText = formattedTime;
+                }
+                updateTime(); // 初回実行
+                setInterval(updateTime, 1000); // 1秒ごとに更新
+            }
+
+            // 送信時の日時を取得、TIMESTAMP型にフォーマット
+            function getCurrentDateTime() {
+                const now = new Date();
+
+                // 日付を取得
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+
+                // 時間を取得
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+
+                // フォーマットされた日付と時間を返す
+                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            }
+
+            // 出勤ボタンが押された時にデータを取得実行
+            function setInData() {
+                id = document.querySelector('#id').value;
+                detail = document.querySelector('#detail').value;
+
+                registerIntime();
+            }
+
+            // 出勤用APIに送信
+            function registerIntime() {
+                const attendance = {
+                    attendance: {
+                        id: id,
+                        detail: detail,
+                    }
+                };
+                // 出退勤挿入用APIにフェッチ
+                fetch('/api/attendances/updates', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(attendance)
+                }).then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(result => {
+                    console.log(result);
+                    document.getElementById('message').innerText = '正常に送信されました。今日も一日頑張りましょう！' // 成功メッセージを表示
+                })
+                .catch(error => {
+                    console.log('error', error);
+                    document.getElementById('message').innerText = '送信に失敗しました。'; // エラーメッセージを表示
+                });
+            }
+
+            // 退勤ボタンが押されたとき
+            function setOutData() {
+                id = document.querySelector('#id').value;
+                detail = document.querySelector('#detail').value;
+
+                registerOuttime();
+            }
+
+            //　退勤時間を登録
+            function registerOuttime() {
+                const attendance = {
+                    attendance: {
+                        id: id,
+                        detail: detail,
+                    }
+                };
+                // 出退勤更新用APIにフェッチ
+                fetch('/api/attendances/updates', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(attendance)
+                }).then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(result => {
+                    console.log(result);
+                    document.getElementById('message').innerText = '正常に送信されました。今日も1日お疲れ様でした!' // 成功メッセージを表示
+                })
+                .catch(error => {
+                    console.log('error', error);
+                    document.getElementById('message').innerText = '送信に失敗しました。'; // エラーメッセージを表示
+                });
+            }
+        </script>
+    </head>
+    <body onload="showCurrentTimeContinuously()">
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <p class="navbar-brand">Sample Company</p>
+                </div>
+            </nav>
+        </header>
+        <div class="container">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div id="currentTime" class="text-center display-1">
+                        <!--現在時刻-->
+                        </div>
+                        <form>
+                            <div class="mb-3">
+                                <label for="id" class="form-label">従業員ID</label>
+                                <input type="number" class="form-control" id="id"/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="detail" class="form-label">備考</label>
+                                <input type="text" class="form-control" id="detail"/>
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-success btn-lg" onClick="setInData()">出勤</button>
+                                <button type="button" class="btn btn-danger btn-lg" onClick="setOutData()">退勤</button>
+                            </div>
+                            <!-- ボタンの下にメッセージを表示するための要素を追加 -->
+                            <div id="message" class="text-center mt-3 alert alert-light"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
