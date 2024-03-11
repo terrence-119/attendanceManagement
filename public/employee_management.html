@@ -23,9 +23,9 @@
                     con += '<a class="text-dark" href="#" onClick="getById(event)" name="' + ob.employee_id + '">';
                     con += ob.employee_id + "</a></th>";
                     con += "<th>" + ob.name + "</th>";
-                    con += '<th><button type="button" class="btn btn-primary">';
-                    con += '編集</button> <button type="button" class="btn btn-danger">'
-                    con += '削除</button></th>'
+                    con += '<th><a role="button" href="#" class="btn btn-primary">';
+                    con += '編集</a> <a role="button" href="#" class="btn btn-danger">';
+                    con += '削除</a></th>';
                     con += "</tr>"
                 });
                 document.querySelector('#datacontainer').innerHTML = con;
