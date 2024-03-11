@@ -17,6 +17,10 @@ router.get('/submit', function(req, res, next) {
   res.sendFile(path.join(__dirname, '../public/submit.html'));
 });
 
+router.get('/manageemployees', function(req, res, next) {
+  res.sendFile(path.join(__dirname, '../public/employee_management.html'));
+});
+
 
 
 module.exports = router;
