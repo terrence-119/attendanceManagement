@@ -163,7 +163,7 @@ router.get('/attendances/:id', function (req, res, next) {
     // クエリパラメータを取得
     const { id } = req.params;
 
-    const q = "SELECT E.name, A.in_time, A.out_time, A.sum_time, A.detail FROM employees AS E INNER JOIN attendances AS A ON A.emp_id = E.employee_id WHERE A.emp_id = $1"
+    const q = "SELECT E.name, A.date, A.in_time, A.out_time, A.sum_time, A.detail FROM employees AS E INNER JOIN attendances AS A ON A.emp_id = E.employee_id WHERE A.emp_id = $1"
     // データベースから取得
     pool.query(q, [id], function (error, results) {
         // エラー

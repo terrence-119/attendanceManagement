@@ -20,7 +20,7 @@
                 let con = "<tr><th>"
                 data.data.map((ob) => {
                     con += "<tr><th>"
-                    con += '<a class="text-dark" href="#" onClick="getById(event)" name="' + ob.employee_id + '">';
+                    con += '<a class="text-dark" href="/employeeinfo/?employee_id=' + ob.employee_id + '">';
                     con += ob.employee_id + "</a></th>";
                     con += "<th>" + ob.name + "</th>";
                     con += '<th><a role="button" href="#" class="btn btn-primary">';

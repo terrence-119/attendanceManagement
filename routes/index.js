@@ -21,6 +21,10 @@ router.get('/manageemployees', function(req, res, next) {
   res.sendFile(path.join(__dirname, '../public/employee_management.html'));
 });
 
+router.get('/employeeinfo', function(req, res, next) {
+  res.sendFile(path.join(__dirname, '../public/employeeinfo.html'));
+})
+
 
 
 module.exports = router;
