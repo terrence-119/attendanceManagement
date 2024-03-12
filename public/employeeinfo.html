@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>
+            従業員管理
+        </title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.css" rel="stylesheet" crossorigin="anonymous">
+        <script>
+            // クエリパラメータからemployee_idを取り出す
+            const queryparam = location.search;
+            console.log(queryparam);
+            const searchParam = new URLSearchParams(queryparam);
+            var queryEntries = searchParam.entries();
+            var queryParamObject = Object.fromEntries(queryEntries);
+            console.log(queryParamObject);
+            const employee_id = queryParamObject.employee_id;
+
+            // 取り出したemployee_idを使って選択したemployee_idの出退勤履歴を送るAPIにフェッチする
+            
+            // fetchしたデータを表示する
+
+            // nameを使って選択した従業員の名前を表示し、個別ページのようにする
+        </script>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="/">Sample Company</a>
+                </div>
+            </nav>
+        </header>
+        <div class="container">
+            <!-- 従業員の名前を入れる -->
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">DATE</th>
+                                <th scope="col">出勤時間</th>
+                                <th scope="col">退勤時間</th>
+                                <th scope="col">勤務合計時間</th>
+                                <th scope="col">備考</th>
+                            </tr>
+                        </thead>
+                        <tbody id="datacontainer">
+                            <!-- APIから受け取ったデータを表示 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
