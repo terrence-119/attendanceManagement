@@ -143,6 +143,13 @@ router.get('/attendances', function(req, res, next) {
                 error: error,
             })
         }
+        if (!results) {
+            res.status(404).json({
+                // メッセエージを画面に表示
+                status: '404 Not Found',
+                message: 'データが見つかりません。'
+            });
+        }
         // 正常なら取得したデータを返却
         res.status(200).json({
             data: results.rows,

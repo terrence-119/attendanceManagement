@@ -16,6 +16,9 @@
 
       // Interval型のデータをパースする
       function parseInterval(sumTime) {
+        if (!sumTime) {
+          return '00:00:00';
+        }
         // TODO
         // そもそもhoursなどがないときはsum_time = {hours: 0, minutes: 0, seconds: 35}のように丁寧に０を送ってくれない
         var hours = 0;
