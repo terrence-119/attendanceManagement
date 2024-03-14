@@ -19,18 +19,15 @@
         if (!sumTime) {
           return '00:00:00';
         }
-        // TODO
-        // そもそもhoursなどがないときはsum_time = {hours: 0, minutes: 0, seconds: 35}のように丁寧に０を送ってくれない
+
         var hours = 0;
         var minutes = 0;
         var seconds = 0;
 
-        // 各プロパティが存在するか確認し、存在しない場合は0を使用
         hours = sumTime.hours ? sumTime.hours : 0;
         minutes = sumTime.minutes ? sumTime.minutes : 0;
         seconds = sumTime.seconds ? sumTime.seconds : 0;
 
-        // 合計時間を計算する
         const totalSeconds = hours * 3600 + minutes * 60 + seconds;
 
         // 時間、分、秒に変換する
@@ -42,6 +39,7 @@
         return `${formattedHour}:${formattedMinutes}:${formattedSeconds}`;
       }
 
+      // APIから受け取ったデータを挿入
       function refreshData() {
         let con = ""
         data.data.map((ob) => {
