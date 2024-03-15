@@ -56,27 +56,22 @@
             const employee_id = queryParamObject.employee_id;
 
             // 取り出したemployee_idを使って選択したemployee_idの出退勤履歴を送るAPIにフェッチする
-            // function getAttendancesById() {
-            //     fetch('/api/attendances/' + employee_id)
-            //         .then( response => {
-            //             if (!response.ok) {
-            //                 throw new Error('Network response was not ok');
-            //             }
-            //             return response.json();
-            //         })
-            //         .then( response => {
-            //             data = response;
-            //             refreshData();
-            //         })
-            //         .catch( error => {
-            //             console.log('There was a problem with the fetch operation: ', error);
-            //         });
-            // }
-            async function getAttendancesById() {
-                const response = await fetch('/api/attendances/' + employee_id);
-                const data = await response.json();
-                insertName(data);
-                refreshData(data);
+            function getAttendancesById() {
+                fetch('/api/attendances/' + employee_id)
+                    .then( response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then( response => {
+                        data = response;
+                        insertName(data);
+                        refreshData(data);
+                    })
+                    .catch( error => {
+                        console.log('There was a problem with the fetch operation: ', error);
+                    });
             }
 
             function insertName(data) {
@@ -85,7 +80,6 @@
                 document.querySelector('#name').innerHTML = name;
             }
 
-            // fetchしたデータを表示する
             function refreshData(data) {
                 let con = "";
                 data.data.map((ob) => {
