@@ -23,8 +23,10 @@
 
             // Interval型のデータをパースする
             function parseInterval(sumTime) {
-                // TODO
-                // そもそもhoursなどがないときはsum_time = {hours: 0, minutes: 0, seconds: 35}のように丁寧に０を送ってくれない
+                if (!sumTime) {
+                    return "00:00:00";
+                }
+                
                 var hours = 0;
                 var minutes = 0;
                 var seconds = 0;
@@ -74,10 +76,9 @@
             }
             // fetchしたデータを表示する
             function refreshData() {
+                let name = data.data.name;
                 let con = "";
-                let name = "";
                 data.data.map((ob) => {
-                    name += ob.name;
                     con += "<tr><th>";
                     con += parseDate(ob.date) + "</th>";
                     con += "<td>" + parseTimestamp(ob.in_time) + "</td>";

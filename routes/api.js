@@ -102,7 +102,7 @@ router.put('/employees/:id', function (req, res, next) {
  */
 router.delete('/employees/:id', function (req, res, next) {
     // parameterからidを取得
-    const { id } = req.params;
+    const id = req.params;
 
     const q = "DELETE FROM employees WHERE employee_id = $1";
 
