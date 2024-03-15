@@ -26,7 +26,7 @@
                 if (!sumTime) {
                     return "00:00:00";
                 }
-                
+
                 var hours = 0;
                 var minutes = 0;
                 var seconds = 0;
@@ -50,33 +50,43 @@
 
             // クエリパラメータからemployee_idを取り出す
             const queryparam = location.search;
-            console.log(queryparam);
             const searchParam = new URLSearchParams(queryparam);
             var queryEntries = searchParam.entries();
             var queryParamObject = Object.fromEntries(queryEntries);
-            console.log(queryParamObject);
             const employee_id = queryParamObject.employee_id;
 
             // 取り出したemployee_idを使って選択したemployee_idの出退勤履歴を送るAPIにフェッチする
-            function getAttendancesById() {
-                fetch('/api/attendances/' + employee_id)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(res => {
-                        data = res;
-                        refreshData();
-                    })
-                    .catch(error => {
-                        console.log('There was a problem with the fetch operation: ', error);
-                    });
+            // function getAttendancesById() {
+            //     fetch('/api/attendances/' + employee_id)
+            //         .then( response => {
+            //             if (!response.ok) {
+            //                 throw new Error('Network response was not ok');
+            //             }
+            //             return response.json();
+            //         })
+            //         .then( response => {
+            //             data = response;
+            //             refreshData();
+            //         })
+            //         .catch( error => {
+            //             console.log('There was a problem with the fetch operation: ', error);
+            //         });
+            // }
+            async function getAttendancesById() {
+                const response = await fetch('/api/attendances/' + employee_id);
+                const data = await response.json();
+                insertName(data);
+                refreshData(data);
             }
+
+            function insertName(data) {
+                let name = data.data[0].name;
+
+                document.querySelector('#name').innerHTML = name;
+            }
+
             // fetchしたデータを表示する
-            function refreshData() {
-                let name = data.data.name;
+            function refreshData(data) {
                 let con = "";
                 data.data.map((ob) => {
                     con += "<tr><th>";
@@ -88,7 +98,6 @@
                     con += "</tr>";
                 });
                 document.querySelector('#datacontainer').innerHTML = con;
-                document.querySelector('#name').innerHTML = name;
             }
         </script>
     </head>

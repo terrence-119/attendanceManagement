@@ -24,8 +24,8 @@ function getCurrentDateTime() {
 /**
  * 従業員の一覧取得
  */
-router.get('/employees', function(req, res, next) {
-    // SELECT
+router.get('/employees', function(req, res) {
+
     pool.query('SELECT * FROM employees', function(error, results) {
         // エラーの場合
         if (error) {
@@ -45,7 +45,7 @@ router.get('/employees', function(req, res, next) {
 /**
  * 従業員の登録
  */
-router.post('/employees', function (req, res, next) {
+router.post('/employees', function (req, res) {
     // bodyからnameを取得
     const { name } = req.body.employee;
 
