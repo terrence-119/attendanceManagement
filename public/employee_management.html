@@ -19,13 +19,11 @@
             function refreshData() {
                 let con = "<tr><th>"
                 data.data.map((ob) => {
-                    con += "<tr><th>"
-                    con += '<a class="text-dark" href="/employeeinfo/?employee_id=' + ob.employee_id + '">';
-                    con += ob.employee_id + "</a></th>";
+                    con += "<tr>";
+                    con += '<th><a class="text-dark" href="employees/info/?employee_id=' + ob.employee_id + '">' + ob.employee_id + "</a></th>";
                     con += "<th>" + ob.name + "</th>";
-                    con += '<th><a role="button" href="#" class="btn btn-primary">';
-                    con += '編集</a> <a role="button" href="#" class="btn btn-danger">';
-                    con += '削除</a></th>';
+                    con += '<th><a role="button" href="#" class="btn btn-primary">編集</a>' ;
+                    con += '<a role="button" href="employees/info/delete/' + ob.employee_id + '" class="btn btn-danger">削除</a></th>';
                     con += "</tr>"
                 });
                 document.querySelector('#datacontainer').innerHTML = con;

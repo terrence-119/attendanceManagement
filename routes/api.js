@@ -113,13 +113,6 @@ router.delete('/employees/:id', function (req, res, next) {
                 status: '500 Interval Server Error',
                 message: error,
             })
-        }
-
-        if (results.rowCount === 0) {
-            res.status(400).json({
-                status: '400 Bad Request',
-                message: 'データが存在しません。',
-            })
         } else {
             // 削除できたらsuccessを返却
             res.status(200).json({

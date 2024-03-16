@@ -10,6 +10,7 @@ const session = require('express-session');
 
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
+var employeesRouter = require('./routes/employees');
 const { body } = require('express-validator');
 
 
@@ -36,5 +37,6 @@ app.use(bodyParser.json()); // JSONフォーマットのパース処理機能を
 
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
+app.use('/employees', employeesRouter);
 
 module.exports = app;
